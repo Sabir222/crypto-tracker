@@ -1,25 +1,21 @@
-// Define the API endpoint and headers
 const apiEndpoint =
   "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
-const apiKey = "c46ba785-7ffd-492e-b554-bd9c302dfad9";
-const headers = {
-  "X-CMC_PRO_API_KEY": apiKey,
-};
-
-export interface CoinDataProps {
-  id: number;
-  name: string;
-}
 
 async function fetchData() {
-  const response = await fetch(apiEndpoint, {
-    headers: headers,
-  });
+  const response = await fetch(
+    `https://crypto-tracker-swart-theta.vercel.app/api/datafetch`,
+    {
+      cache: "no-cache",
+      next: {
+        revalidate: 15,
+      },
+    }
+  );
   if (!response.ok) {
     throw new Error("failed to fetch");
   }
   const data = await response.json();
-  return data.data;
+  return data.data.data;
 }
 
 // fetchData();
