@@ -2,15 +2,12 @@ const apiEndpoint =
   "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
 
 async function fetchData() {
-  const response = await fetch(
-    `https://crypto-tracker-swart-theta.vercel.app/api/datafetch`,
-    {
-      cache: "no-cache",
-      next: {
-        revalidate: 15,
-      },
-    }
-  );
+  const response = await fetch(`http://localhost:3000/api/datafetch`, {
+    cache: "no-cache",
+    next: {
+      revalidate: 15,
+    },
+  });
   if (!response.ok) {
     throw new Error("failed to fetch");
   }
