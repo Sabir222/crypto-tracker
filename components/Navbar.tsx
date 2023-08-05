@@ -1,8 +1,6 @@
 "use client";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Button } from "@/components/ui/button";
 import { ClipboardList, Menu } from "lucide-react";
-import { getServerSession } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -97,7 +95,6 @@ const Navbar = () => {
                 </Button>
               ) : (
                 <div className="flex flex-col gap-4">
-                  
                   <Button
                     className="text-white bg-transparent"
                     variant="outline"
