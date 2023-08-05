@@ -1,13 +1,16 @@
 "use client";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Button } from "@/components/ui/button";
 import { ClipboardList, Menu } from "lucide-react";
-import { signIn, signOut } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
   const navbarRef = useRef<HTMLDivElement | null>(null);
+  const { data: session } = useSession();
   const handleClick = () => {
     setNav(!nav);
   };
@@ -48,15 +51,21 @@ const Navbar = () => {
                 WatchList
               </Link>
             </Button>
-            <Button variant="ghost" asChild onClick={() => signOut()}>
-              <Link href="/">Sign-Out</Link>
-            </Button>
-            <Button variant="ghost" asChild onClick={() => signIn()}>
-              <Link href="/">Sign-In</Link>
-            </Button>
-            <Button className="text-black" variant="outline" asChild>
-              <Link href="/register">Create Account</Link>
-            </Button>
+            {session ? (
+              <Button variant="ghost" asChild onClick={() => signOut()}>
+                <Link href="/">Sign-Out</Link>
+              </Button>
+            ) : (
+              <div>
+                {" "}
+                <Button className="mr-4" variant="ghost" asChild onClick={() => signIn()}>
+                  <Link href="/">Sign-In</Link>
+                </Button>
+                <Button className="text-black" variant="outline" asChild>
+                  <Link href="/register">Create Account</Link>
+                </Button>
+              </div>
+            )}
           </div>
           <div className="relative md:hidden">
             <Button variant="ghost" size="icon" asChild className="mr-4">

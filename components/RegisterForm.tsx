@@ -8,6 +8,7 @@ import { z, ZodType } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import Link from "next/link";
 
 type FormProps = {
   name: string;
@@ -72,7 +73,13 @@ const RegisterForm = () => {
             onSubmit={handleSubmit(submitData)}
             className="flex flex-col gap-3"
           >
-            <Label className="text-white" htmlFor="email">
+            <Label
+              className="text-2xl font-bold text-center text-white"
+              htmlFor="email"
+            >
+              Create Account
+            </Label>
+            <Label className="mt-5 text-white" htmlFor="email">
               Name
             </Label>
             {errors.name && (
@@ -143,6 +150,12 @@ const RegisterForm = () => {
             <Button variant="outline" type="submit">
               Create Account
             </Button>
+            <div className="flex items-center justify-center">
+              <p className="mr-2 text-white">You already have an account?</p>
+              <Link href="/login">
+                <p className="font-bold text-white underline">Sign-In</p>
+              </Link>
+            </div>
           </form>
         </div>
       </div>
