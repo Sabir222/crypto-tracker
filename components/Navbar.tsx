@@ -60,7 +60,7 @@ const Navbar = () => {
                   asChild
                   onClick={() => signIn()}
                 >
-                  <Link href="/">Sign-In</Link>
+                  <Link href="/signin">Sign-In</Link>
                 </Button>
                 <Button className="text-black" variant="outline" asChild>
                   <Link href="/register">Create Account</Link>
@@ -100,7 +100,7 @@ const Navbar = () => {
                     asChild
                     onClick={() => signIn()}
                   >
-                    <Link href="/">Sign-In</Link>
+                    <Link href="/signin">Sign-In</Link>
                   </Button>
                   <Button variant="outline" asChild>
                     <Link href="/register" className="text-black">
