@@ -57,8 +57,12 @@ const Navbar = () => {
               </Button>
             ) : (
               <div>
-                {" "}
-                <Button className="mr-4" variant="ghost" asChild onClick={() => signIn()}>
+                <Button
+                  className="mr-4"
+                  variant="ghost"
+                  asChild
+                  onClick={() => signIn()}
+                >
                   <Link href="/">Sign-In</Link>
                 </Button>
                 <Button className="text-black" variant="outline" asChild>
@@ -82,27 +86,33 @@ const Navbar = () => {
                 nav ? "flex" : "hidden"
               } `}
             >
-              <Button
-                className="text-white bg-transparent"
-                variant="outline"
-                asChild
-                onClick={() => signIn()}
-              >
-                <Link href="/">Sign-In</Link>
-              </Button>
-              <Button
-                className="text-white bg-transparent"
-                variant="outline"
-                asChild
-                onClick={() => signOut()}
-              >
-                <Link href="/">Sign-Out</Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <Link href="/register" className="text-black">
-                  Create Account
-                </Link>
-              </Button>
+              {session ? (
+                <Button
+                  className="text-white bg-transparent"
+                  variant="outline"
+                  asChild
+                  onClick={() => signOut()}
+                >
+                  <Link href="/">Sign-Out</Link>
+                </Button>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  
+                  <Button
+                    className="text-white bg-transparent"
+                    variant="outline"
+                    asChild
+                    onClick={() => signIn()}
+                  >
+                    <Link href="/">Sign-In</Link>
+                  </Button>
+                  <Button variant="outline" asChild>
+                    <Link href="/register" className="text-black">
+                      Create Account
+                    </Link>
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
