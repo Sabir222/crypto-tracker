@@ -12,7 +12,6 @@ const Navbar = () => {
   const handleClick = () => {
     setNav(!nav);
   };
-
   const handleOutsideClick = (e: MouseEvent) => {
     if (
       navbarRef.current &&
