@@ -1,22 +1,22 @@
-import { NextResponse } from "next/server";
+// import { NextResponse } from "next/server";
 
-const apiEndpoint =
-  "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
-const apiKey = "c46ba785-7ffd-492e-b554-bd9c302dfad9";
-const headers = {
-  "X-CMC_PRO_API_KEY": apiKey,
-};
+// const apiEndpoint =
+//   "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
+// const apiKey = "c46ba785-7ffd-492e-b554-bd9c302dfad9";
+// const headers = {
+//   "X-CMC_PRO_API_KEY": apiKey,
+// };
 
-export async function GET() {
-  const response = await fetch(apiEndpoint, {
-    headers: headers,
-    cache: "no-cache",
-    next: {
-      revalidate: 15,
-    },
-  });
+// export async function GET() {
+//   const response = await fetch(apiEndpoint, {
+//     headers: headers,
 
-  const data = await response.json();
+//     next: {
+//       revalidate: 305,
+//     },
+//   });
 
-  return NextResponse.json({ data });
-}
+//   const data = await response.json();
+
+//   return NextResponse.json({ data });
+// }

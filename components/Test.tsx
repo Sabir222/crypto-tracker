@@ -1,21 +1,9 @@
-import fetchData from "@/app/api/cryptoData";
-
-interface DataProps {
-  name: string;
-  id: number;
-}
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 
 const Test = async () => {
-  const data = await fetchData();
-  return (
-    <div>
-      <ul className="text-white">
-        {data.map((coin: DataProps) => {
-          return <li key={coin.id}>{coin.name}</li>;
-        })}
-      </ul>
-    </div>
-  );
+  const session = await getServerSession(authOptions);
+  return <div className="text-white">{JSON.stringify(session)}</div>;
 };
 
 export default Test;
