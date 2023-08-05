@@ -9,6 +9,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import Link from "next/link";
+import { sign } from "crypto";
+import { signIn } from "next-auth/react";
 
 type FormProps = {
   name: string;
@@ -60,9 +62,10 @@ const RegisterForm = () => {
         SignIcon();
       }
     } catch (error) {
-      throw new Error("failed to fetch");
+      console.log(error);
     }
     console.log("sent", data);
+    signIn();
     reset();
   };
   return (
