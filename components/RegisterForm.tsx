@@ -59,13 +59,12 @@ const RegisterForm = () => {
         },
       });
       if (res.ok) {
-        SignIcon();
+        signIn();
       }
     } catch (error) {
       console.log(error);
     }
     console.log("sent", data);
-    signIn();
     reset();
   };
   return (
