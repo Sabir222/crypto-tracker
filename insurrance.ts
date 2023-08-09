@@ -18,28 +18,28 @@ import {
 import { useEffect, useState } from "react";
 import useCoinStore from "@/context/store";
 
-// const frameworks = [
-//   {
-//     value: "next.js",
-//     label: "Next.js",
-//   },
-//   {
-//     value: "sveltekit",
-//     label: "SvelteKit",
-//   },
-//   {
-//     value: "nuxt.js",
-//     label: "Nuxt.js",
-//   },
-//   {
-//     value: "remix",
-//     label: "Remix",
-//   },
-//   {
-//     value: "astro",
-//     label: "Astro",
-//   },
-// ];
+const frameworks = [
+  {
+    value: "next.js",
+    label: "Next.js",
+  },
+  {
+    value: "sveltekit",
+    label: "SvelteKit",
+  },
+  {
+    value: "nuxt.js",
+    label: "Nuxt.js",
+  },
+  {
+    value: "remix",
+    label: "Remix",
+  },
+  {
+    value: "astro",
+    label: "Astro",
+  },
+];
 
 interface ModelProps {
   visible: boolean;
@@ -53,10 +53,8 @@ const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
     fetchCoins();
   }, [fetchCoins]);
 
-  const frameworks = coins.map((coin) => ({
-    value: coin.name,
-    label: coin.name,
-  }));
+  console.log(coins);
+  
 
   return (
     <>
@@ -83,8 +81,8 @@ const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
                     <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[200px]  p-0">
-                  <Command className="max-h-[400px] ">
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
                     <CommandInput placeholder="Search framework..." />
                     <CommandEmpty>No framework found.</CommandEmpty>
                     <CommandGroup>

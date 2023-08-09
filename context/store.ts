@@ -1,40 +1,44 @@
-// import { create } from "zustand";
+import { create } from "zustand";
 
-// const apiEndpoint =
-//   "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
-// const apiKey = process.env.CMC_PRO_API_KEY;
-// const headers: HeadersInit = apiKey
-//   ? {
-//       "X-CMC_PRO_API_KEY": apiKey,
-//     }
-//   : {};
+interface CoinDataProps {
+  name: string;
+  id: number;
 
-// interface CoinDataProps {
-//   id: number;
-//   name: string;
-// }
-// interface CoinStore {
-//   coins: CoinDataProps[];
-//   fetchCoins: () => Promise<void>;
-// }
+  symbol: string;
+  price: number;
+  cmc_rank: number;
+  quote: {
+    USD: {
+      percent_change_1h: number;
+      percent_change_24h: number;
+      percent_change_7d: number;
+      percent_change_30d: number;
+      market_cap: number;
+      volume_24h: number;
+      price: number;
+    };
+  };
+}
+interface CoinStore {
+  coins: CoinDataProps[];
+  fetchCoins: () => Promise<void>;
+}
 
-// const useCoinStore = create<CoinStore>((set) => ({
-//   coins: [],
-//   fetchCoins: async () => {
-//     try {
-//       const response = await fetch(apiEndpoint, {
-//         headers: headers,
-//       });
-//       if (!response.ok) {
-//         throw new Error("Failed to fetch Data");
-//       }
-//       const data = await response.json();
-//       const coins = data.data;
-//       set({ coins });
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   },
-// }));
+const useCoinStore = create<CoinStore>((set) => ({
+  coins: [],
+  fetchCoins: async () => {
+    try {
+      const response = await fetch("/api/datafetch");
+      if (!response.ok) {
+        throw new Error("Failed to fetch Data");
+      }
+      const data = await response.json();
+      const coins = data;
+      set({ coins });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+}));
 
-// export default useCoinStore;
+export default useCoinStore;
