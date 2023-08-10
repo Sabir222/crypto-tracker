@@ -1,4 +1,5 @@
-import fetchData from "@/app/api/cryptoData";
+"use client";
+
 import {
   Table,
   TableBody,
@@ -8,6 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import useCoinStore from "@/context/store";
+import watchListStore from "@/context/watchListStore";
+import { log } from "console";
+import { watch } from "fs";
+import { useEffect } from "react";
 interface DataProps {
   name: string;
   id: number;
@@ -28,8 +34,21 @@ interface DataProps {
   };
 }
 
-const WatchListTable = async () => {
-  const data = await fetchData();
+const WatchListTable = () => {
+  const { coins, fetchCoins } = useCoinStore();
+  const { watchCoins, fetchWatchCoins } = watchListStore();
+
+  useEffect(() => {
+    fetchCoins();
+  }, [fetchCoins]);
+
+  useEffect(() => {
+    fetchWatchCoins();
+  }, [fetchWatchCoins]);
+  const filteredCoins = coins.filter((coin: DataProps) =>
+    watchCoins.some((watchCoin) => watchCoin.symbol === coin.symbol)
+  );
+  console.log(filteredCoins);
 
   return (
     <main className="p-4 max-w-[1400px] mx-auto">
@@ -48,7 +67,7 @@ const WatchListTable = async () => {
           </TableRow>
         </TableHeader>
         <TableBody className="text-white">
-          {data.map((coin: DataProps) => (
+          {filteredCoins.map((coin: DataProps) => (
             <TableRow key={coin.id}>
               <TableCell className="font-medium">{coin.cmc_rank}</TableCell>
               <TableCell>{coin.name}</TableCell>

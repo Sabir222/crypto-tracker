@@ -7,6 +7,7 @@ export default function Home() {
   return (
     <main className="">
       <Navbar />
+      <Test />
       <Table />
     </main>
   );

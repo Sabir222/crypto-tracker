@@ -8,6 +8,7 @@ const page = () => {
       <Navbar />
       {/* <WatchListTable /> */}
       <EmptyList />
+      <WatchListTable/>
     </>
   );
 };

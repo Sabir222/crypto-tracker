@@ -16,15 +16,15 @@ model User {
   email String @unique
   password String 
   name String?
-  crypto CryptoList[]
+  crypto Cryptolist[]
 }
 
 
 
-model CryptoList {
+model Cryptolist {
   id Int @default(autoincrement())
   symbol  String   
-  userId Int 
-  user User @relation(fields: [userId],references: [id])
-  @@unique([symbol, userId])
+  userEmail String 
+  user User @relation(fields: [userEmail],references: [email])
+  @@unique([symbol,userEmail ])
 }
