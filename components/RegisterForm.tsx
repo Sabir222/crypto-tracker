@@ -3,13 +3,11 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { z, ZodType } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import Link from "next/link";
-import { sign } from "crypto";
 import { signIn } from "next-auth/react";
 
 type FormProps = {
@@ -23,6 +21,8 @@ const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+
+  
   const schema: ZodType<FormProps> = z
     .object({
       name: z.string().min(2, "Name must contain at leat 2 characters").max(30),

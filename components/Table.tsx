@@ -10,7 +10,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import useCoinStore from "@/context/store";
+import watchListStore from "@/context/watchListStore";
 import { Star } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 interface DataProps {
   name: string;
@@ -32,13 +34,71 @@ interface DataProps {
   };
 }
 
+interface coinProps {
+  email: string;
+  symbol: string;
+}
+
 const CoinTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [coinsPerPage, setCoinsPerPage] = useState(25);
+  const [email, setEmail] = useState<String>("");
+  const [symbol, setSymbol] = useState("");
+  const { data: session } = useSession();
+  const userEmail = session?.user?.email || "";
+
+  const submitData = async () => {
+    try {
+      const res = await fetch("/api/watchlist", {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          symbol,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        fetchWatchCoins();
+      }
+      console.log(res);
+    } catch (err) {
+      console.log("unlucky dude", err);
+    }
+  };
+  const deleteData = async () => {
+    try {
+      const res = await fetch("/api/watchlist", {
+        method: "DELETE",
+        body: JSON.stringify({
+          email,
+          symbol,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        fetchWatchCoins();
+      }
+      console.log(res);
+    } catch (err) {
+      console.log("unlucky dude", err);
+    }
+  };
+
   const { coins, fetchCoins } = useCoinStore();
+
   useEffect(() => {
     fetchCoins();
   }, [fetchCoins]);
+
+  const { watchCoins, fetchWatchCoins } = watchListStore();
+
+  useEffect(() => {
+    fetchWatchCoins();
+  }, [fetchWatchCoins]);
   console.log(coins);
   const lastCoinIndex = currentPage * coinsPerPage;
   const firstCoinIndex = lastCoinIndex - coinsPerPage;
@@ -71,9 +131,30 @@ const CoinTable = () => {
           {sliced.map((coin: DataProps) => (
             <TableRow key={coin.id}>
               <TableCell className="font-medium">
-                <button>
-                  <Star size={20} />
-                </button>
+                {coins.some((c) => c.symbol === coin.symbol) &&
+                watchCoins.some((w) => w.symbol === coin.symbol) ? (
+                  <button
+                    onClick={() => {
+                      setSymbol(coin.symbol);
+                      setEmail(userEmail);
+                      deleteData();
+                    }}
+                  >
+                    <Star size={20} className="text-[#FFD700] " />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setSymbol(coin.symbol);
+                      setEmail(userEmail);
+
+                      submitData();
+                      console.log(coin.symbol);
+                    }}
+                  >
+                    <Star size={20} className="hover:text-[#FFD700] " />
+                  </button>
+                )}
               </TableCell>
               <TableCell className="font-medium">{coin.cmc_rank}</TableCell>
               <TableCell>
@@ -169,140 +250,3 @@ const CoinTable = () => {
 };
 
 export default CoinTable;
-
-/*       <Table>
-        <TableCaption>A list of Crypto Currency Prices.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-left">#</TableHead>
-            <TableHead className="text-left">Coin</TableHead>
-            <TableHead className="text-left">Price</TableHead>
-            <TableHead className="text-right">1h%</TableHead>
-            <TableHead className="text-right">24h%</TableHead>
-            <TableHead className="text-right">7d%</TableHead>
-            <TableHead className="text-right">Market Cap</TableHead>
-            <TableHead className="text-right">Volume (24h)</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="text-white">
-          {coins.map((coin: DataProps) => (
-            <TableRow key={coin.id}>
-              <TableCell className="font-medium">{coin.cmc_rank}</TableCell>
-              <TableCell>{coin.name}</TableCell>
-              <TableCell>${coin.quote.USD.price.toFixed(2)}</TableCell>
-              <TableCell
-                className={`text-right ${
-                  coin.quote.USD.percent_change_1h >= 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                } `}
-              >
-                {coin.quote.USD.percent_change_1h.toFixed(2)}
-              </TableCell>
-              <TableCell
-                className={`text-right ${
-                  coin.quote.USD.percent_change_24h >= 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                } `}
-              >
-                {coin.quote.USD.percent_change_24h.toFixed(2)}
-              </TableCell>
-              <TableCell
-                className={`text-right ${
-                  coin.quote.USD.percent_change_7d >= 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                } `}
-              >
-                {coin.quote.USD.percent_change_7d.toFixed(2)}
-              </TableCell>
-              <TableCell className="text-right">
-                ${coin.quote.USD.market_cap.toFixed(2)}
-              </TableCell>
-              <TableCell className="text-right">
-                ${coin.quote.USD.volume_24h.toFixed(2)}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table> */
-/* <Table className="">
-        <TableCaption>A list of Crypto Currency Prices.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-left"></TableHead>
-            <TableHead className="text-left">#</TableHead>
-            <TableHead className="text-left ">Coin</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="text-white">
-          {coins.map((coin: DataProps) => (
-            <TableRow key={coin.id}>
-              <TableCell>
-                <div className="flex justify-center ">
-                  <button>
-                    <Star className="w-5 h-5 " />
-                  </button>
-                </div>
-              </TableCell>
-              <TableCell className="font-medium">{coin.cmc_rank}</TableCell>
-              <TableCell>{coin.name}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-     
-      <Table className="">
-        <TableCaption>A list of Crypto Currency Prices.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-left">Price</TableHead>
-            <TableHead className="text-right">1h%</TableHead>
-            <TableHead className="text-right">24h%</TableHead>
-            <TableHead className="text-right">7d%</TableHead>
-            <TableHead className="text-right">Market Cap</TableHead>
-            <TableHead className="text-right">Volume (24h)</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="text-white">
-          {coins.map((coin: DataProps) => (
-            <TableRow key={coin.id}>
-              <TableCell>${coin.quote.USD.price.toFixed(2)}</TableCell>
-              <TableCell
-                className={`text-right ${
-                  coin.quote.USD.percent_change_1h >= 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                } `}
-              >
-                {coin.quote.USD.percent_change_1h.toFixed(2)}
-              </TableCell>
-              <TableCell
-                className={`text-right ${
-                  coin.quote.USD.percent_change_24h >= 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                } `}
-              >
-                {coin.quote.USD.percent_change_24h.toFixed(2)}
-              </TableCell>
-              <TableCell
-                className={`text-right ${
-                  coin.quote.USD.percent_change_7d >= 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                } `}
-              >
-                {coin.quote.USD.percent_change_7d.toFixed(2)}
-              </TableCell>
-              <TableCell className="text-right">
-                ${coin.quote.USD.market_cap.toFixed(2)}
-              </TableCell>
-              <TableCell className="text-right">
-                ${coin.quote.USD.volume_24h.toFixed(2)}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>*/
