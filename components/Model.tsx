@@ -32,7 +32,7 @@ const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
   const { data: session } = useSession();
 
   const userEmail = session?.user?.email || "";
-  const upValue = value.toLocaleUpperCase();
+
   const { coins, fetchCoins } = useCoinStore();
 
   useEffect(() => {
@@ -49,13 +49,16 @@ const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
     label: coin.symbol,
   }));
   const submitData = async () => {
-    setSymbol(value.toUpperCase());
+    if (value === "Select a Coin ...") {
+      return;
+    }
+    const upValue = value.toUpperCase();
     try {
       const res = await fetch("/api/watchlist", {
         method: "POST",
         body: JSON.stringify({
           email: userEmail,
-          symbol,
+          symbol: upValue,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -63,13 +66,14 @@ const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
       });
       if (res.ok) {
         fetchWatchCoins();
+        setValue("Select a Coin ...");
       }
       console.log(res);
     } catch (err) {
       console.log("unlucky dude", err);
     }
   };
-  console.log(value.toUpperCase());
+  console.log(value);
 
   return (
     <main className="absolute top-0 bottom-0 left-0 right-0 bg-black/40 ">
@@ -87,7 +91,7 @@ const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
                   aria-expanded={open}
                   className="w-[200px] justify-between"
                 >
-                  {value}
+                  {value.toUpperCase()}
 
                   <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
                 </Button>
@@ -101,7 +105,11 @@ const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
                       <CommandItem
                         key={framework.value}
                         onSelect={(currentValue) => {
-                          setValue(currentValue === value ? "" : currentValue);
+                          setValue(
+                            currentValue === value.toUpperCase()
+                              ? ""
+                              : currentValue
+                          );
                           setOpen(false);
                         }}
                       >

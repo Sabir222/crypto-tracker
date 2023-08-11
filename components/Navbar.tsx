@@ -31,7 +31,7 @@ const Navbar = () => {
     <nav className="bg-gray-900">
       <div
         ref={navbarRef}
-        className="flex items-center justify-between px-4 py-2 max-w-[1400px] text-white mx-auto "
+        className="flex items-center justify-between px-4 py-2 max-w-[1200px] text-white mx-auto "
       >
         <div>
           <Link href="/">

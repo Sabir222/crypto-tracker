@@ -117,7 +117,7 @@ const CoinTable = () => {
   };
 
   return (
-    <main className="p-4 max-w-[1400px] mx-auto flex flex-col  ">
+    <main className="p-4 max-w-[1200px] mx-auto flex flex-col  ">
       <Table>
         <TableCaption></TableCaption>
         <TableHeader>
