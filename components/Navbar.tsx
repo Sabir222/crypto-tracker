@@ -36,7 +36,7 @@ const Navbar = () => {
         <div>
           <Link href="/">
             <p className="text-lg font-light">
-              Coint<span className="font-bold">Tracker</span>
+              Coin<span className="font-bold">Tracker</span>
             </p>
           </Link>
         </div>

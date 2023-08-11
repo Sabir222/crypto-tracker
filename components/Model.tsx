@@ -17,29 +17,9 @@ import {
 } from "@/components/ui/popover";
 import { useEffect, useState } from "react";
 import useCoinStore from "@/context/store";
-
-// const frameworks = [
-//   {
-//     value: "next.js",
-//     label: "Next.js",
-//   },
-//   {
-//     value: "sveltekit",
-//     label: "SvelteKit",
-//   },
-//   {
-//     value: "nuxt.js",
-//     label: "Nuxt.js",
-//   },
-//   {
-//     value: "remix",
-//     label: "Remix",
-//   },
-//   {
-//     value: "astro",
-//     label: "Astro",
-//   },
-// ];
+import { log } from "console";
+import { useSession } from "next-auth/react";
+import watchListStore from "@/context/watchListStore";
 
 interface ModelProps {
   visible: boolean;
@@ -47,16 +27,49 @@ interface ModelProps {
 }
 const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState("Select a Coin ...");
+  const [symbol, setSymbol] = useState("");
+  const { data: session } = useSession();
+
+  const userEmail = session?.user?.email || "";
+  const upValue = value.toLocaleUpperCase();
   const { coins, fetchCoins } = useCoinStore();
+
   useEffect(() => {
     fetchCoins();
   }, [fetchCoins]);
 
+  const { watchCoins, fetchWatchCoins } = watchListStore();
+
+  useEffect(() => {
+    fetchWatchCoins();
+  }, [fetchWatchCoins]);
   const frameworks = coins.map((coin) => ({
-    value: coin.name,
-    label: coin.name,
+    value: coin.symbol,
+    label: coin.symbol,
   }));
+  const submitData = async () => {
+    setSymbol(value.toUpperCase());
+    try {
+      const res = await fetch("/api/watchlist", {
+        method: "POST",
+        body: JSON.stringify({
+          email: userEmail,
+          symbol,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        fetchWatchCoins();
+      }
+      console.log(res);
+    } catch (err) {
+      console.log("unlucky dude", err);
+    }
+  };
+  console.log(value.toUpperCase());
 
   return (
     <>
@@ -75,18 +88,15 @@ const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
                     aria-expanded={open}
                     className="w-[200px] justify-between"
                   >
-                    {value
-                      ? frameworks.find(
-                          (framework) => framework.value === value
-                        )?.label
-                      : "Select A Coin..."}
+                    {value}
+
                     <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[200px]  p-0">
-                  <Command className="max-h-[400px] ">
-                    <CommandInput placeholder="Search framework..." />
-                    <CommandEmpty>No framework found.</CommandEmpty>
+                <PopoverContent className="w-[200px] h-[210px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search for Coins..." />
+                    <CommandEmpty>No Coin found.</CommandEmpty>
                     <CommandGroup>
                       {frameworks.map((framework) => (
                         <CommandItem
@@ -113,7 +123,10 @@ const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
                   </Command>
                 </PopoverContent>
               </Popover>
-              <button className="px-5 py-1 mt-4 text-gray-900 bg-white rounded-md">
+              <button
+                className="px-5 py-1 mt-4 text-gray-900 bg-white rounded-md"
+                onClick={() => submitData()}
+              >
                 Select
               </button>
             </div>

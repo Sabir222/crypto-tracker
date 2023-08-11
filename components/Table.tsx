@@ -42,7 +42,6 @@ interface coinProps {
 const CoinTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [coinsPerPage, setCoinsPerPage] = useState(25);
-  const [email, setEmail] = useState<string>("");
   const [symbol, setSymbol] = useState("");
   const { data: session } = useSession();
   const userEmail = session?.user?.email || "";
