@@ -42,17 +42,18 @@ interface coinProps {
 const CoinTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [coinsPerPage, setCoinsPerPage] = useState(25);
-  const [email, setEmail] = useState<String>("");
+  const [email, setEmail] = useState<string>("");
   const [symbol, setSymbol] = useState("");
   const { data: session } = useSession();
   const userEmail = session?.user?.email || "";
 
-  const submitData = async () => {
+  const submitData = async (symbol: string) => {
+    setSymbol(symbol);
     try {
       const res = await fetch("/api/watchlist", {
         method: "POST",
         body: JSON.stringify({
-          email,
+          email: userEmail,
           symbol,
         }),
         headers: {
@@ -60,19 +61,23 @@ const CoinTable = () => {
         },
       });
       if (res.ok) {
+        // setSymbol("");
+
         fetchWatchCoins();
       }
+
       console.log(res);
     } catch (err) {
       console.log("unlucky dude", err);
     }
   };
-  const deleteData = async () => {
+  const deleteData = async (symbol: string) => {
+    setSymbol(symbol);
     try {
       const res = await fetch("/api/watchlist", {
         method: "DELETE",
         body: JSON.stringify({
-          email,
+          email: userEmail,
           symbol,
         }),
         headers: {
@@ -80,6 +85,8 @@ const CoinTable = () => {
         },
       });
       if (res.ok) {
+        // setSymbol("");
+
         fetchWatchCoins();
       }
       console.log(res);
@@ -135,9 +142,9 @@ const CoinTable = () => {
                 watchCoins.some((w) => w.symbol === coin.symbol) ? (
                   <button
                     onClick={() => {
-                      setSymbol(coin.symbol);
-                      setEmail(userEmail);
-                      deleteData();
+                      // setSymbol(coin.symbol);
+                      // setEmail(userEmail);
+                      deleteData(coin.symbol);
                     }}
                   >
                     <Star size={20} className="text-[#FFD700] " />
@@ -145,10 +152,10 @@ const CoinTable = () => {
                 ) : (
                   <button
                     onClick={() => {
-                      setSymbol(coin.symbol);
-                      setEmail(userEmail);
+                      // setEmail(userEmail);
 
-                      submitData();
+                      submitData(coin.symbol);
+
                       console.log(coin.symbol);
                     }}
                   >

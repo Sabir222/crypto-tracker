@@ -13,7 +13,6 @@ export async function GET() {
 
   return new Response(JSON.stringify(watchlist));
 }
-
 export async function POST(req: Request) {
   const { email, symbol } = await req.json();
 
@@ -31,7 +30,7 @@ export async function DELETE(req: Request) {
   if (!symbol) return NextResponse.json({ message: "symbol is required" });
   const cryptolist = await prisma.cryptolist.deleteMany({
     where: {
-      symbol:symbol,
+      symbol: symbol,
       userEmail: email,
     },
   });
