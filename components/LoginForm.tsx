@@ -31,6 +31,12 @@ const LoginForm = ({ setModalType }: RegisterFormProps) => {
           <div className="gap-3 px-6 py-10 rounded-md md:px-14 bg-opacity-40">
             <form className="flex flex-col gap-3" onSubmit={onSubmit}>
               <Label
+                className="text-2xl font-bold text-center text-blue-300"
+                htmlFor="email"
+              >
+                Login to track your favorite coin easily 🚀
+              </Label>
+              <Label
                 className="text-2xl font-bold text-center text-white"
                 htmlFor="email"
               >

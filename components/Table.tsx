@@ -15,7 +15,7 @@ import { Star } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import DialogCom from "./DialogCom";
-import SigninModal from "./SigninModal";
+import RegisterModal from "./RegisterModal";
 interface DataProps {
   name: string;
   id: number;
@@ -45,14 +45,16 @@ const CoinTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [coinsPerPage, setCoinsPerPage] = useState(25);
   const [symbol, setSymbol] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState("");
+
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
 
   const { data: session } = useSession();
 
   const userEmail = session?.user?.email || "";
 
   const submitData = async (symbol: string) => {
-    !session && setShowModal(true);
+    !session && setShowRegisterModal(true), setModalType("signin");
 
     setSymbol(symbol);
     try {
@@ -161,8 +163,6 @@ const CoinTable = () => {
                       // setEmail(userEmail);
 
                       submitData(coin.symbol);
-
-                      console.log(coin.symbol);
                     }}
                   >
                     <Star size={20} className="hover:text-[#FFD700] " />
@@ -258,7 +258,12 @@ const CoinTable = () => {
           4
         </Button>
       </div>
-      <SigninModal showModal={showModal} setShowModal={setShowModal} />
+      <RegisterModal
+        showRegisterModal={showRegisterModal}
+        setShowRegisterModal={setShowRegisterModal}
+        modalType={modalType}
+        setModalType={setModalType}
+      />
     </main>
   );
 };

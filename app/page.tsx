@@ -9,8 +9,9 @@ export default function Home() {
   return (
     <main className="">
       <Navbar />
-      {/* <Test /> */}
-      <Table />
+      <div className="mt-[70px]">
+        <Table />
+      </div>
     </main>
   );
 }

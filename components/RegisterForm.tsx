@@ -72,13 +72,19 @@ const RegisterForm = ({ setModalType }: LoginFormProps) => {
   };
   return (
     <main>
-      <div className="mx-auto max-w-[1400px] p-4  ">
+      <div className="mx-auto max-w-[1400px] p-4">
         <div className="bg-slate-700 sm:w-[608px] rounded-md">
           <div className="gap-3 px-10 py-10 rounded-md bg-opacity-40">
             <form
               onSubmit={handleSubmit(submitData)}
               className="flex flex-col gap-3"
             >
+              <Label
+                className="text-2xl font-bold text-center text-blue-300"
+                htmlFor="email"
+              >
+                Register to track your favorite coin easily 🚀
+              </Label>
               <Label
                 className="text-2xl font-bold text-center text-white"
                 htmlFor="email"

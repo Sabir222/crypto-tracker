@@ -4,12 +4,10 @@ import { ClipboardList, Menu } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import SigninModal from "./SigninModal";
 import RegisterModal from "./RegisterModal";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [modalType, setModalType] = useState("");
 
@@ -60,11 +58,9 @@ const Navbar = () => {
         </div>
         <div className="">
           <div className="items-center hidden gap-4 md:flex">
-            <Button variant="ghost" asChild>
-              <Link href="/watchlist">
-                <ClipboardList className="mr-4" />
-                WatchList
-              </Link>
+            <Button variant="ghost" onClick={handleVisible}>
+              <ClipboardList className="mr-4" />
+              WatchList
             </Button>
             {session ? (
               <Button variant="ghost" asChild onClick={() => signOut()}>
@@ -91,10 +87,13 @@ const Navbar = () => {
           </div>
           <div className="relative md:hidden">
             {session ? (
-              <Button variant="ghost" size="icon" asChild className="mr-4">
-                <Link href="/watchlist">
-                  <ClipboardList />
-                </Link>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="mr-4"
+                onClick={handleVisible}
+              >
+                <ClipboardList />
               </Button>
             ) : (
               <Button
