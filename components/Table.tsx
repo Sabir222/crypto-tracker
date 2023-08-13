@@ -1,5 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+
 import {
   Table,
   TableBody,
@@ -14,8 +16,9 @@ import watchListStore from "@/context/watchListStore";
 import { Star } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import DialogCom from "./DialogCom";
 import RegisterModal from "./RegisterModal";
+
+const logoUrl = "https://s2.coinmarketcap.com/static/img/coins/64x64/";
 interface DataProps {
   name: string;
   id: number;
@@ -132,6 +135,7 @@ const CoinTable = () => {
         <TableHeader>
           <TableRow>
             <TableHead className="text-left"></TableHead>
+            <TableHead className="text-left"></TableHead>
             <TableHead className="text-left">#</TableHead>
             <TableHead className="text-left">Coin</TableHead>
             <TableHead className="text-left">Price</TableHead>
@@ -168,6 +172,18 @@ const CoinTable = () => {
                     <Star size={20} className="hover:text-[#FFD700] " />
                   </button>
                 )}
+              </TableCell>
+              <TableCell className="font-medium ">
+                <div className="min-w-[20px]">
+                  <Image
+                    width={20}
+                    height={20}
+                    alt="logo"
+                    loading = 'lazy'
+                    layout="intrinsic"
+                    src={`${logoUrl}${coin.id}.png`}
+                  />
+                </div>
               </TableCell>
               <TableCell className="font-medium">{coin.cmc_rank}</TableCell>
               <TableCell>
