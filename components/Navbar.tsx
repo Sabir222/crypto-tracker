@@ -58,10 +58,20 @@ const Navbar = () => {
         </div>
         <div className="">
           <div className="items-center hidden gap-4 md:flex">
-            <Button variant="ghost" onClick={handleVisible}>
-              <ClipboardList className="mr-4" />
-              WatchList
-            </Button>
+            {session ? (
+              <Button variant="ghost" asChild>
+                <Link href="/watchlist">
+                  <ClipboardList className="mr-4" />
+                  WatchList
+                </Link>
+              </Button>
+            ) : (
+              <Button variant="ghost" onClick={handleVisible}>
+                <ClipboardList className="mr-4" />
+                WatchList
+              </Button>
+            )}
+
             {session ? (
               <Button variant="ghost" asChild onClick={() => signOut()}>
                 <Link href="/">Sign-Out</Link>
@@ -87,13 +97,10 @@ const Navbar = () => {
           </div>
           <div className="relative md:hidden">
             {session ? (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="mr-4"
-                onClick={handleVisible}
-              >
-                <ClipboardList />
+              <Button variant="ghost" size="icon" className="mr-4" asChild>
+                <Link href="watchlist">
+                  <ClipboardList />
+                </Link>
               </Button>
             ) : (
               <Button
