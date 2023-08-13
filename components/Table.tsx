@@ -14,6 +14,8 @@ import watchListStore from "@/context/watchListStore";
 import { Star } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import DialogCom from "./DialogCom";
+import SigninModal from "./SigninModal";
 interface DataProps {
   name: string;
   id: number;
@@ -43,10 +45,15 @@ const CoinTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [coinsPerPage, setCoinsPerPage] = useState(25);
   const [symbol, setSymbol] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
   const { data: session } = useSession();
+
   const userEmail = session?.user?.email || "";
 
   const submitData = async (symbol: string) => {
+    !session && setShowModal(true);
+
     setSymbol(symbol);
     try {
       const res = await fetch("/api/watchlist", {
@@ -251,6 +258,7 @@ const CoinTable = () => {
           4
         </Button>
       </div>
+      <SigninModal showModal={showModal} setShowModal={setShowModal} />
     </main>
   );
 };

@@ -17,12 +17,15 @@ type FormProps = {
   confirmPassword: string;
 };
 
-const RegisterForm = () => {
+interface LoginFormProps {
+  setModalType: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const RegisterForm = ({ setModalType }: LoginFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  
   const schema: ZodType<FormProps> = z
     .object({
       name: z.string().min(2, "Name must contain at leat 2 characters").max(30),
@@ -69,96 +72,97 @@ const RegisterForm = () => {
   };
   return (
     <main>
-      <div className="mx-auto max-w-[1400px] p-4 flex items-center justify-center h-[100vh] ">
-        <div className=" gap-3 md:px-14 px-6 py-10 rounded-md bg-zinc-600 bg-opacity-40 w-[608px] ">
-          <form
-            onSubmit={handleSubmit(submitData)}
-            className="flex flex-col gap-3"
-          >
-            <Label
-              className="text-2xl font-bold text-center text-white"
-              htmlFor="email"
+      <div className="mx-auto max-w-[1400px] p-4  ">
+        <div className="bg-slate-700 sm:w-[608px] rounded-md">
+          <div className="gap-3 px-10 py-10 rounded-md bg-opacity-40">
+            <form
+              onSubmit={handleSubmit(submitData)}
+              className="flex flex-col gap-3"
             >
-              Create Account
-            </Label>
-            <Label className="mt-5 text-white" htmlFor="email">
-              Name
-            </Label>
-            {errors.name && (
-              <span className="block text-red-300">{errors.name.message}</span>
-            )}
-            <Input
-              {...register("name")}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="text-white bg-transparent"
-              placeholder="Name"
-            />
-            <Label className="text-white" htmlFor="email">
-              Email
-            </Label>
-            {errors.email && (
-              <span className="block text-red-300">{errors.email.message}</span>
-            )}
-            <Input
-              {...register("email")}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              id="email"
-              className="text-white bg-transparent"
-              placeholder="Email"
-            />
-            <Label className="text-white" htmlFor="email">
-              Password
-            </Label>
-            {errors.password && (
-              <span className="block text-red-300">
-                {errors.password.message}
-              </span>
-            )}
-            <Input
-              {...register("password")}
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-              id="password"
-              className="text-white bg-transparent"
-              placeholder="Password"
-            />
-            <Label className="text-white" htmlFor="email">
-              Confirm Password
-            </Label>
-            {errors.confirmPassword && (
-              <span className="block text-red-300">
-                {errors.confirmPassword.message}
-              </span>
-            )}
-            <Input
-              {...register("confirmPassword")}
-              type="password"
-              id="confirmpassword"
-              className="text-white bg-transparent"
-              placeholder="Password"
-            />
-            {/* <div className="flex items-center gap-1 mt-2 mb-4 text-white">
-              <Checkbox id="terms" className="bg-white" />
-              <label
-                htmlFor="terms"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              <Label
+                className="text-2xl font-bold text-center text-white"
+                htmlFor="email"
               >
-                Accept terms and conditions
-              </label>
-            </div> */}
-            <Button variant="outline" type="submit">
-              Create Account
-            </Button>
-            <div className="flex items-center justify-center">
-              <p className="mr-2 text-white">You already have an account?</p>
-              <Link href="/login">
-                <p className="font-bold text-white underline">Sign-In</p>
-              </Link>
-            </div>
-          </form>
+                Create Account
+              </Label>
+              <Label className="mt-5 text-white" htmlFor="email">
+                Name
+              </Label>
+              {errors.name && (
+                <span className="block text-red-300">
+                  {errors.name.message}
+                </span>
+              )}
+              <Input
+                {...register("name")}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="text-white bg-transparent"
+                placeholder="Name"
+              />
+              <Label className="text-white" htmlFor="email">
+                Email
+              </Label>
+              {errors.email && (
+                <span className="block text-red-300">
+                  {errors.email.message}
+                </span>
+              )}
+              <Input
+                {...register("email")}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                id="email"
+                className="text-white bg-transparent"
+                placeholder="Email"
+              />
+              <Label className="text-white" htmlFor="email">
+                Password
+              </Label>
+              {errors.password && (
+                <span className="block text-red-300">
+                  {errors.password.message}
+                </span>
+              )}
+              <Input
+                {...register("password")}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                id="password"
+                className="text-white bg-transparent"
+                placeholder="Password"
+              />
+              <Label className="text-white" htmlFor="email">
+                Confirm Password
+              </Label>
+              {errors.confirmPassword && (
+                <span className="block text-red-300">
+                  {errors.confirmPassword.message}
+                </span>
+              )}
+              <Input
+                {...register("confirmPassword")}
+                type="password"
+                id="confirmpassword"
+                className="text-white bg-transparent"
+                placeholder="Password"
+              />
+              <Button variant="outline" type="submit">
+                Create Account
+              </Button>
+              <div className="flex items-center justify-center">
+                <p className="mr-2 text-white">You already have an account?</p>
+
+                <button
+                  className="font-bold text-white underline"
+                  onClick={() => setModalType("signin")}
+                >
+                  Sign-In
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </main>
@@ -166,6 +170,3 @@ const RegisterForm = () => {
 };
 
 export default RegisterForm;
-function SignIcon() {
-  throw new Error("Function not implemented.");
-}

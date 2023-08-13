@@ -8,7 +8,7 @@ body,
   height: 100%;
 }
 body {
-  background-color: rgb(28 25 23);
+  background-color: #1c2840;
 }
 
 @layer base {

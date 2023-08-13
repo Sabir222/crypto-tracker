@@ -1,5 +1,5 @@
 "use client";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -78,9 +78,11 @@ const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
   return (
     <main className="absolute top-0 bottom-0 left-0 right-0 bg-black/40 ">
       <div className="flex items-center justify-center h-[100vh] ">
-        <div className="bg-gray-900 h-[300px]  p-4 flex justify-center items-center rounded-2xl relative">
+        <div className="bg-slate-800 h-[300px]  p-4 flex justify-center items-center rounded-2xl relative">
           <div className="absolute text-lg font-bold text-white top-4 right-6">
-            <button onClick={toggleVisible}>X</button>
+            <button onClick={toggleVisible}>
+              <X />
+            </button>
           </div>
           <div className="flex flex-col text-gray-900 ">
             <Popover open={open} onOpenChange={setOpen}>

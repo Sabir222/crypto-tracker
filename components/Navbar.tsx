@@ -4,14 +4,32 @@ import { ClipboardList, Menu } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import SigninModal from "./SigninModal";
+import RegisterModal from "./RegisterModal";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [modalType, setModalType] = useState("");
+
   const navbarRef = useRef<HTMLDivElement | null>(null);
   const { data: session } = useSession();
   const handleClick = () => {
     setNav(!nav);
   };
+
+  const handleVisible = () => {
+    setModalType("signin");
+    setNav(false);
+    setShowRegisterModal(true);
+  };
+  const handleRegisterVisible = () => {
+    setModalType("register");
+    setNav(false);
+    setShowRegisterModal(true);
+  };
+
   const handleOutsideClick = (e: MouseEvent) => {
     if (
       navbarRef.current &&
@@ -28,7 +46,7 @@ const Navbar = () => {
     };
   });
   return (
-    <nav className="bg-gray-900">
+    <nav className="fixed top-0 w-full bg-gray-900">
       <div
         ref={navbarRef}
         className="flex items-center justify-between px-4 py-2 max-w-[1200px] text-white mx-auto "
@@ -57,23 +75,38 @@ const Navbar = () => {
                 <Button
                   className="mr-4"
                   variant="ghost"
-                  asChild
-                  onClick={() => signIn()}
+                  onClick={handleVisible}
                 >
-                  <Link href="/signin">Sign-In</Link>
+                  Sign-In
                 </Button>
-                <Button className="text-black" variant="outline" asChild>
-                  <Link href="/register">Create Account</Link>
+                <Button
+                  className="text-gray-800"
+                  variant="outline"
+                  onClick={handleRegisterVisible}
+                >
+                  Create Account
                 </Button>
               </div>
             )}
           </div>
           <div className="relative md:hidden">
-            <Button variant="ghost" size="icon" asChild className="mr-4">
-              <Link href="/watchlist">
+            {session ? (
+              <Button variant="ghost" size="icon" asChild className="mr-4">
+                <Link href="/watchlist">
+                  <ClipboardList />
+                </Link>
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="mr-4"
+                onClick={handleVisible}
+              >
                 <ClipboardList />
-              </Link>
-            </Button>
+              </Button>
+            )}
+
             <Button variant="ghost" size="icon" onClick={handleClick}>
               <Menu />
             </Button>
@@ -97,15 +130,16 @@ const Navbar = () => {
                   <Button
                     className="text-white bg-transparent"
                     variant="outline"
-                    asChild
-                    onClick={() => signIn()}
+                    onClick={handleVisible}
                   >
-                    <Link href="/signin">Sign-In</Link>
+                    Sign-In
                   </Button>
-                  <Button variant="outline" asChild>
-                    <Link href="/register" className="text-black">
-                      Create Account
-                    </Link>
+                  <Button
+                    variant="outline"
+                    onClick={handleRegisterVisible}
+                    className="text-gray-800"
+                  >
+                    Create Account
                   </Button>
                 </div>
               )}
@@ -113,6 +147,13 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      {/* <SigninModal showModal={showModal} setShowModal={setShowModal} /> */}
+      <RegisterModal
+        showRegisterModal={showRegisterModal}
+        setShowRegisterModal={setShowRegisterModal}
+        modalType={modalType}
+        setModalType={setModalType}
+      />
     </nav>
   );
 };
