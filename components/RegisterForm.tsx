@@ -7,8 +7,7 @@ import { z, ZodType } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 type FormProps = {
   name: string;
@@ -62,12 +61,11 @@ const RegisterForm = ({ setModalType }: LoginFormProps) => {
         },
       });
       if (res.ok) {
-        signIn();
+        setModalType("signin");
       }
     } catch (error) {
       console.log(error);
     }
-    console.log("sent", data);
     reset();
   };
   return (
