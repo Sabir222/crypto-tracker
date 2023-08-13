@@ -1,9 +1,9 @@
 import LoginForm from "@/components/LoginForm";
 import Navbar from "@/components/Navbar";
-interface RegisterModalProps {
+interface RegisterModalProp {
   setModalType: React.Dispatch<React.SetStateAction<string>>;
 }
-const page = ({ setModalType }: RegisterModalProps) => {
+const page = ({ setModalType }: RegisterModalProp) => {
   return (
     <div className="h-[100vh] flex items-center justify-center">
       <Navbar />
