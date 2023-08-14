@@ -11,7 +11,7 @@ export async function GET(request: any) {
     const response = await fetch(apiEndpoint, {
       headers: headers,
       next: {
-        revalidate: 360,
+        revalidate: 20,
       },
     });
 
