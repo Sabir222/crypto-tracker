@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 interface RegisterFormProps {
   setModalType: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -13,15 +13,23 @@ const LoginForm = ({ setModalType }: RegisterFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const searchParams = useSearchParams();
-  const error = searchParams.get("error") ? "Email or Password incorrect" : "";
+  const [errorMessage, setErrorMessage] = useState(""); // Define error message state
 
-  const onSubmit = (e: React.FormEvent) => {
+  // const error = searchParams.get("error") ? "Email or Password incorrect" : "";
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    signIn("credentials", {
+    const res = await signIn("credentials", {
       email,
       password,
       callbackUrl: "/",
+      redirect: false,
     });
+    if (res?.error) {
+      setErrorMessage("Email or Password incorrect");
+    } else {
+      window.location.reload();
+    }
   };
 
   return (
@@ -67,7 +75,9 @@ const LoginForm = ({ setModalType }: RegisterFormProps) => {
                 className="text-white bg-transparent"
                 placeholder="Password"
               />
-              {error && <span className="text-red-300">{error}</span>}
+              {errorMessage && (
+                <span className="text-red-300">{errorMessage}</span>
+              )}
 
               <Button variant="outline" type="submit">
                 Login

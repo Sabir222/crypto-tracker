@@ -9,6 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Image from "next/image";
+
 import useCoinStore from "@/context/store";
 import watchListStore from "@/context/watchListStore";
 import { log } from "console";
@@ -16,7 +18,7 @@ import { watch } from "fs";
 import { useEffect, useState } from "react";
 import EmptyList from "./EmptyList";
 import { Button } from "./ui/button";
-import { Star } from "lucide-react";
+import { Loader2, Star } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Model from "./Model";
 interface DataProps {
@@ -38,10 +40,12 @@ interface DataProps {
     };
   };
 }
+const logoUrl = "https://s2.coinmarketcap.com/static/img/coins/64x64/";
 
 const WatchListTable = () => {
   const [symbol, setSymbol] = useState("");
   const { coins, fetchCoins } = useCoinStore();
+  const [isLoading, setIsLoading] = useState<string | null>(null);
   const { watchCoins, fetchWatchCoins } = watchListStore();
   const { data: session } = useSession();
   const [visible, setVisible] = useState(false);
@@ -65,6 +69,8 @@ const WatchListTable = () => {
 
   //       SUBMIT Data           //
   const submitData = async (symbol: string) => {
+    setIsLoading(symbol);
+
     setSymbol(symbol);
     try {
       const res = await fetch("/api/watchlist", {
@@ -81,16 +87,20 @@ const WatchListTable = () => {
         // setSymbol("");
 
         fetchWatchCoins();
+        setIsLoading(null);
       }
 
       console.log(res);
     } catch (err) {
       console.log("unlucky dude", err);
+      setIsLoading(null);
     }
   };
   //         DELETE Data          //
   const deleteData = async (symbol: string) => {
     setSymbol(symbol);
+    setIsLoading(symbol);
+
     try {
       const res = await fetch("/api/watchlist", {
         method: "DELETE",
@@ -106,10 +116,12 @@ const WatchListTable = () => {
         // setSymbol("");
 
         fetchWatchCoins();
+        setIsLoading(null);
       }
       console.log(res);
     } catch (err) {
       console.log("unlucky dude", err);
+      setIsLoading(null);
     }
   };
 
@@ -131,6 +143,7 @@ const WatchListTable = () => {
             <TableHeader>
               <TableRow>
                 <TableHead className="text-left"></TableHead>
+                <TableHead className="text-left"></TableHead>
                 <TableHead className="text-left">#</TableHead>
                 <TableHead className="text-left">Coin</TableHead>
                 <TableHead className="text-left">Price</TableHead>
@@ -141,12 +154,14 @@ const WatchListTable = () => {
                 <TableHead className="text-right">Volume (24h)</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="text-white">
+            <TableBody className="text-white ">
               {filteredCoins.map((coin: DataProps) => (
                 <TableRow key={coin.id}>
-                  <TableCell className="font-medium">
-                    {coins.some((c) => c.symbol === coin.symbol) &&
-                    watchCoins.some((w) => w.symbol === coin.symbol) ? (
+                  <TableCell className=" font-medium w-[40px]">
+                    {isLoading === coin.symbol ? (
+                      <Loader2 size={20} className=" animate-spin" />
+                    ) : coins.some((c) => c.symbol === coin.symbol) &&
+                      watchCoins.some((w) => w.symbol === coin.symbol) ? (
                       <button
                         onClick={() => {
                           // setSymbol(coin.symbol);
@@ -162,13 +177,23 @@ const WatchListTable = () => {
                           // setEmail(userEmail);
 
                           submitData(coin.symbol);
-
-                          console.log(coin.symbol);
                         }}
                       >
                         <Star size={20} className="hover:text-[#FFD700] " />
                       </button>
                     )}
+                  </TableCell>
+                  <TableCell className="font-medium ">
+                    <div className="min-w-[20px]">
+                      <Image
+                        width={20}
+                        height={20}
+                        alt="logo"
+                        loading="lazy"
+                        layout="intrinsic"
+                        src={`${logoUrl}${coin.id}.png`}
+                      />
+                    </div>
                   </TableCell>
                   <TableCell className="font-medium">{coin.cmc_rank}</TableCell>
                   <TableCell>

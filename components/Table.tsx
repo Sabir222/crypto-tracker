@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-
+import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 
 import {
@@ -56,6 +56,8 @@ const CoinTable = () => {
 
   const { data: session } = useSession();
 
+  const { toast } = useToast();
+
   const userEmail = session?.user?.email || "";
 
   const submitData = async (symbol: string) => {
@@ -78,6 +80,9 @@ const CoinTable = () => {
 
         fetchWatchCoins();
         setIsLoading(null);
+        toast({
+          description: "Coin Added to watch list",
+        });
       }
 
       console.log(res);
@@ -106,6 +111,9 @@ const CoinTable = () => {
 
         fetchWatchCoins();
         setIsLoading(null);
+        toast({
+          description: "Coin Deleted  from watch list",
+        });
       }
       console.log(res);
     } catch (err) {
@@ -158,14 +166,12 @@ const CoinTable = () => {
           {sliced.map((coin: DataProps) => (
             <TableRow key={coin.id}>
               <TableCell className=" font-medium w-[40px]">
-                {isLoading === coin.symbol ? (
+                {isLoading === coin.symbol && session ? (
                   <Loader2 size={20} className=" animate-spin" />
                 ) : coins.some((c) => c.symbol === coin.symbol) &&
                   watchCoins.some((w) => w.symbol === coin.symbol) ? (
                   <button
                     onClick={() => {
-                      // setSymbol(coin.symbol);
-                      // setEmail(userEmail);
                       deleteData(coin.symbol);
                     }}
                   >
@@ -174,8 +180,6 @@ const CoinTable = () => {
                 ) : (
                   <button
                     onClick={() => {
-                      // setEmail(userEmail);
-
                       submitData(coin.symbol);
                     }}
                   >
