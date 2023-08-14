@@ -1,4 +1,3 @@
-import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import RegisterModal from "@/components/RegisterModal";
 import Table from "@/components/Table";
