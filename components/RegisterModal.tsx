@@ -18,11 +18,18 @@ const RegisterModal = ({
     setShowRegisterModal(false);
   };
 
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      setShowRegisterModal(false);
+    }
+  };
+
   return (
     <main
       className={`fixed top-0 ${
         showRegisterModal ? "flex" : "hidden"
       } bottom-0 left-0 right-0 flex items-center justify-center bg-black/70`}
+      onClick={handleBackdropClick}
     >
       <div className="relative">
         <button
