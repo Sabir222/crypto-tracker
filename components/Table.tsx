@@ -1,5 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+
 import Image from "next/image";
 
 import {
@@ -49,7 +51,7 @@ const CoinTable = () => {
   const [coinsPerPage, setCoinsPerPage] = useState(25);
   const [symbol, setSymbol] = useState("");
   const [modalType, setModalType] = useState("");
-
+  const [isLoading, setIsLoading] = useState<string | null>(null);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 
   const { data: session } = useSession();
@@ -58,7 +60,7 @@ const CoinTable = () => {
 
   const submitData = async (symbol: string) => {
     !session && setShowRegisterModal(true), setModalType("signin");
-
+    setIsLoading(symbol);
     setSymbol(symbol);
     try {
       const res = await fetch("/api/watchlist", {
@@ -75,15 +77,19 @@ const CoinTable = () => {
         // setSymbol("");
 
         fetchWatchCoins();
+        setIsLoading(null);
       }
 
       console.log(res);
     } catch (err) {
       console.log("unlucky dude", err);
+      setIsLoading(null);
     }
   };
   const deleteData = async (symbol: string) => {
     setSymbol(symbol);
+    setIsLoading(symbol);
+
     try {
       const res = await fetch("/api/watchlist", {
         method: "DELETE",
@@ -99,10 +105,12 @@ const CoinTable = () => {
         // setSymbol("");
 
         fetchWatchCoins();
+        setIsLoading(null);
       }
       console.log(res);
     } catch (err) {
       console.log("unlucky dude", err);
+      setIsLoading(null);
     }
   };
 
@@ -146,12 +154,14 @@ const CoinTable = () => {
             <TableHead className="text-right">Volume (24h)</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className="text-white">
+        <TableBody className="text-white ">
           {sliced.map((coin: DataProps) => (
             <TableRow key={coin.id}>
-              <TableCell className="font-medium">
-                {coins.some((c) => c.symbol === coin.symbol) &&
-                watchCoins.some((w) => w.symbol === coin.symbol) ? (
+              <TableCell className=" font-medium w-[40px]">
+                {isLoading === coin.symbol ? (
+                  <Loader2 size={20} className=" animate-spin" />
+                ) : coins.some((c) => c.symbol === coin.symbol) &&
+                  watchCoins.some((w) => w.symbol === coin.symbol) ? (
                   <button
                     onClick={() => {
                       // setSymbol(coin.symbol);
@@ -179,7 +189,7 @@ const CoinTable = () => {
                     width={20}
                     height={20}
                     alt="logo"
-                    loading = 'lazy'
+                    loading="lazy"
                     layout="intrinsic"
                     src={`${logoUrl}${coin.id}.png`}
                   />
@@ -233,46 +243,19 @@ const CoinTable = () => {
         </TableBody>
       </Table>
       <div className="flex justify-center gap-10">
-        <Button
-          variant="ghost"
-          className="flex items-center justify-center w-3 h-6 text-white rounded-sm ring-1 ring-white"
-          onClick={() => {
-            setCurrentPage(1);
-            scrollToTop();
-          }}
-        >
-          1
-        </Button>
-        <Button
-          variant="ghost"
-          className="flex items-center justify-center w-3 h-6 text-white ring-1 ring-white"
-          onClick={() => {
-            setCurrentPage(2);
-            scrollToTop();
-          }}
-        >
-          2
-        </Button>
-        <Button
-          variant="ghost"
-          className="flex items-center justify-center w-3 h-6 text-white ring-1 ring-white"
-          onClick={() => {
-            setCurrentPage(3);
-            scrollToTop();
-          }}
-        >
-          3
-        </Button>
-        <Button
-          variant="ghost"
-          className="flex items-center justify-center w-3 h-6 text-white ring-1 ring-white"
-          onClick={() => {
-            setCurrentPage(4);
-            scrollToTop();
-          }}
-        >
-          4
-        </Button>
+        {[1, 2, 3, 4].map((pageNumber) => (
+          <Button
+            key={pageNumber}
+            variant="ghost"
+            className="flex items-center justify-center w-3 h-6 text-white ring-1 ring-white"
+            onClick={() => {
+              setCurrentPage(pageNumber);
+              scrollToTop();
+            }}
+          >
+            {pageNumber}
+          </Button>
+        ))}
       </div>
       <RegisterModal
         showRegisterModal={showRegisterModal}
