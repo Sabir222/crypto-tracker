@@ -76,8 +76,6 @@ const CoinTable = () => {
         },
       });
       if (res.ok) {
-        // setSymbol("");
-
         fetchWatchCoins();
         setIsLoading(null);
         toast({

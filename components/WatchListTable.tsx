@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-
+import { useToast } from "@/components/ui/use-toast";
 import useCoinStore from "@/context/store";
 import watchListStore from "@/context/watchListStore";
 import { log } from "console";
@@ -50,6 +50,8 @@ const WatchListTable = () => {
   const { data: session } = useSession();
   const [visible, setVisible] = useState(false);
 
+  const { toast } = useToast();
+
   const toggleVisible = () => {
     setVisible((prev) => !prev);
   };
@@ -88,6 +90,9 @@ const WatchListTable = () => {
 
         fetchWatchCoins();
         setIsLoading(null);
+        toast({
+          description: "Coin Added to watch list",
+        });
       }
 
       console.log(res);
@@ -117,6 +122,9 @@ const WatchListTable = () => {
 
         fetchWatchCoins();
         setIsLoading(null);
+        toast({
+          description: "Coin Deleted  from watch list",
+        });
       }
       console.log(res);
     } catch (err) {
