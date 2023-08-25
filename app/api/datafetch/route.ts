@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 
 const apiEndpoint =
   "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
-const apiKey = "c46ba785-7ffd-492e-b554-bd9c302dfad9";
+const apiKey = process.env.CMC_PRO_API_KEY;
+if (!apiKey) {
+  throw new Error("CMC_PRO_API_KEY is not defined in your environment");
+}
 const headers = {
   "X-CMC_PRO_API_KEY": apiKey,
 };
@@ -10,8 +13,9 @@ export async function GET(request: any) {
   try {
     const response = await fetch(apiEndpoint, {
       headers: headers,
+      // cache: "no-cache",
       next: {
-        revalidate: 20,
+        revalidate: 3600,
       },
     });
 

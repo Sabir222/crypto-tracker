@@ -4,18 +4,26 @@ import { ClipboardList, Menu } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import RegisterModal from "./RegisterModal";
+import RegisterModal from "./AuthModal";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [modalType, setModalType] = useState("");
+  // const [loading, setloading] = useState(true);
 
   const navbarRef = useRef<HTMLDivElement | null>(null);
   const { data: session } = useSession();
   const handleClick = () => {
     setNav(!nav);
   };
+
+  // useEffect(() => {
+  //   if (session) {
+  //     setloading(false);
+  //   }
+  // }, [session]);
 
   const handleVisible = () => {
     setModalType("signin");
@@ -58,7 +66,9 @@ const Navbar = () => {
         </div>
         <div className="">
           <div className="items-center hidden gap-4 md:flex">
-            {session ? (
+            {session === undefined ? (
+              <Skeleton className="w-[100px] h-[40px] rounded-full" />
+            ) : session ? (
               <Button variant="ghost" asChild>
                 <Link href="/watchlist">
                   <ClipboardList className="mr-4" />
@@ -72,7 +82,12 @@ const Navbar = () => {
               </Button>
             )}
 
-            {session ? (
+            {session === undefined ? (
+              <div className="flex gap-1">
+                <Skeleton className="w-[40px] h-[40px] rounded-full" />
+                <Skeleton className="w-[60px] h-[40px] rounded-full" />
+              </div>
+            ) : session ? (
               <Button variant="ghost" asChild onClick={() => signOut()}>
                 <Link href="/">Sign-Out</Link>
               </Button>

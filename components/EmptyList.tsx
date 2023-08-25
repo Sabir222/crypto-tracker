@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import Model from "./Model";
+import Model from "./Modal";
 import { useState } from "react";
 
 const EmptyList = () => {

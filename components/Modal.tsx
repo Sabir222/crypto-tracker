@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/popover";
 import { useEffect, useState } from "react";
 import useCoinStore from "@/context/store";
-import { log } from "console";
 import { useSession } from "next-auth/react";
 import watchListStore from "@/context/watchListStore";
 
@@ -73,7 +72,6 @@ const Model: React.FC<ModelProps> = ({ toggleVisible }) => {
       console.log("unlucky dude", err);
     }
   };
-  console.log(value);
 
   return (
     <main className="absolute top-0 bottom-0 left-0 right-0 bg-black/40 ">

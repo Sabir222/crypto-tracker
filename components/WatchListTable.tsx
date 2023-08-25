@@ -20,7 +20,7 @@ import EmptyList from "./EmptyList";
 import { Button } from "./ui/button";
 import { Loader2, Star } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Model from "./Model";
+import Model from "./Modal";
 interface DataProps {
   name: string;
   id: number;

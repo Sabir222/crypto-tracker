@@ -33,8 +33,8 @@ const useCoinStore = create<CoinStore>((set) => ({
         throw new Error("Failed to fetch Data");
       }
       const data = await response.json();
-      const coins = data;
-      set({ coins });
+      // const coins = data;
+      set({ coins: data });
     } catch (error) {
       console.error(error);
     }
